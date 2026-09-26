@@ -83,4 +83,22 @@ final class VolumeLevelTests: XCTestCase {
       VolumeLevel.percentText(0.5, isMuted: true), "-%",
       "otherwise muting at half volume still reads 50%")
   }
+
+  // MARK: - The level bar
+
+  func testTheLevelBarTracksTheVolume() {
+    XCTAssertEqual(VolumeLevel.levelBarProgress(0, isMuted: false), 0)
+    XCTAssertEqual(VolumeLevel.levelBarProgress(0.5, isMuted: false), 0.5)
+    XCTAssertEqual(VolumeLevel.levelBarProgress(1, isMuted: false), 1)
+  }
+
+  func testAMutedLevelBarIsEmpty() {
+    XCTAssertEqual(VolumeLevel.levelBarProgress(0.5, isMuted: true), 0)
+    XCTAssertEqual(VolumeLevel.levelBarProgress(1, isMuted: true), 0)
+  }
+
+  func testTheLevelBarStaysInsideTheWidget() {
+    XCTAssertEqual(VolumeLevel.levelBarProgress(-0.2, isMuted: false), 0)
+    XCTAssertEqual(VolumeLevel.levelBarProgress(1.4, isMuted: false), 1)
+  }
 }

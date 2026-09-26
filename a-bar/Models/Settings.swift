@@ -323,10 +323,12 @@ struct WidgetSettings: Codable, Equatable {
   var sound: SoundWidgetSettings = SoundWidgetSettings()
   var mic: MicWidgetSettings = MicWidgetSettings()
   var keyboard: KeyboardWidgetSettings = KeyboardWidgetSettings()
+  var timeMachine: TimeMachineWidgetSettings = TimeMachineWidgetSettings()
   var github: GitHubWidgetSettings = GitHubWidgetSettings()
   var cpu: CPUWidgetSettings = CPUWidgetSettings()
   var memory: MemoryWidgetSettings = MemoryWidgetSettings()
   var gpu: GPUWidgetSettings = GPUWidgetSettings()
+  var cpuAndGpu: CPUAndGPUWidgetSettings = CPUAndGPUWidgetSettings()
   var netstats: NetstatsWidgetSettings = NetstatsWidgetSettings()
   var diskActivity: DiskActivityWidgetSettings = DiskActivityWidgetSettings()
   var storage: StorageWidgetSettings = StorageWidgetSettings()
@@ -434,17 +436,29 @@ struct SoundWidgetSettings: Codable, Equatable {
   var refreshInterval: TimeInterval = 2
   var backgroundColor: ThemeColor = .blue
   var showIcon: Bool = true
+  /// Off keeps the percentage. On hides it and fills the icon vertically, the way the time
+  /// widget fills horizontally for day progress.
+  var showLevelBar: Bool = false
 }
 
 struct MicWidgetSettings: Codable, Equatable {
   var refreshInterval: TimeInterval = 2
   var backgroundColor: ThemeColor = .orange
   var showIcon: Bool = true
+  /// Off keeps the percentage. On hides it and fills the icon vertically, the way the time
+  /// widget fills horizontally for day progress.
+  var showLevelBar: Bool = false
 }
 
 struct KeyboardWidgetSettings: Codable, Equatable {
   var refreshInterval: TimeInterval = 5
   var backgroundColor: ThemeColor = .mainAlt
+  var showIcon: Bool = true
+}
+
+struct TimeMachineWidgetSettings: Codable, Equatable {
+  /// Backups move slowly, so this does not need to poll `tmutil` as often as the graphs.
+  var refreshInterval: TimeInterval = 30
   var showIcon: Bool = true
 }
 
@@ -480,6 +494,12 @@ struct GPUWidgetSettings: Codable, Equatable {
   var showIcon: Bool = true
 }
 
+/// CPU and GPU drawn together. Graph colors stay on the separate CPU and GPU settings.
+struct CPUAndGPUWidgetSettings: Codable, Equatable {
+  var refreshInterval: TimeInterval = 2
+  var showIcon: Bool = true
+}
+
 struct NetstatsWidgetSettings: Codable, Equatable {
   var refreshInterval: TimeInterval = 4
   var downloadColor: ThemeColor = .magenta
@@ -496,6 +516,39 @@ struct DiskActivityWidgetSettings: Codable, Equatable {
 
 struct StorageWidgetSettings: Codable, Equatable {
   var refreshInterval: TimeInterval = 60  // 1 minute
+
+  /// What the number next to each bar says. Percentage used is what the widget showed before
+  /// this choice existed.
+  var shownValue: ShownValue = .percentUsed
+
+  enum ShownValue: String, Codable, CaseIterable {
+    case percentUsed
+    case percentRemaining
+    case spaceRemaining
+
+    var label: String {
+      switch self {
+      case .percentUsed: return "Percentage used"
+      case .percentRemaining: return "Percentage remaining"
+      case .spaceRemaining: return "Space remaining"
+      }
+    }
+  }
+
+  /// Disks the bar shows.
+  ///
+  /// `nil` is the fresh-install default: every mounted volume, including a disk that appears
+  /// later. A list shows only those volumes. Unplugging a selected disk leaves it in the list,
+  /// so it comes back the next time it mounts. A disk that appears while a list is set stays
+  /// off the bar until the user selects it. An empty list shows nothing.
+  var selectedVolumes: [SelectedVolume]? = nil
+
+  /// A disk the user chose, remembered by the volume UUID (or the mount path when macOS
+  /// reports no UUID). `name` is what the settings list shows after the disk is unplugged.
+  struct SelectedVolume: Codable, Equatable, Identifiable {
+    var id: String
+    var name: String
+  }
 }
 
 struct HackerNewsWidgetSettings: Codable, Equatable {

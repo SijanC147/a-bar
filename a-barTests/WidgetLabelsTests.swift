@@ -122,6 +122,70 @@ final class WidgetLabelsTests: XCTestCase {
     XCTAssertEqual(WidgetLabels.storageVolumeName(""), "")
   }
 
+  // MARK: - Storage values stay five columns wide
+
+  func testTheDefaultStorageReadingIsPercentageUsed() {
+    XCTAssertEqual(StorageWidgetSettings().shownValue, .percentUsed)
+  }
+
+  func testPercentagesArePaddedToTheWidthOfOneHundredPercent() {
+    XCTAssertEqual(WidgetLabels.storagePercent(0), "   0%")
+    XCTAssertEqual(WidgetLabels.storagePercent(9), "   9%")
+    XCTAssertEqual(WidgetLabels.storagePercent(10), "  10%")
+    XCTAssertEqual(WidgetLabels.storagePercent(100), " 100%")
+    XCTAssertEqual(WidgetLabels.storagePercent(250), " 100%", "a reading past full still fits")
+    XCTAssertEqual(WidgetLabels.storagePercent(-4), "   0%")
+  }
+
+  func testRemainingSpaceUsesSmartPrecisionAtEachScale() {
+    XCTAssertEqual(WidgetLabels.storageRemaining(0), "   0B")
+    XCTAssertEqual(WidgetLabels.storageRemaining(512), " 512B")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1023), "1023B")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1024), "1.00K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1536), "1.50K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(10 * 1024), "10.0K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(100 * 1024), " 100K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1023 * 1024), "1023K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1024 * 1024), "1.00M")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1024 * 1024 * 1024), "1.00G")
+    XCTAssertEqual(WidgetLabels.storageRemaining(512 * 1024 * 1024 * 1024), " 512G")
+    XCTAssertEqual(WidgetLabels.storageRemaining(1024 * 1024 * 1024 * 1024), "1.00T")
+    let petabyte = 1024 * 1024 * 1024 * 1024 * 1024
+    XCTAssertEqual(WidgetLabels.storageRemaining(petabyte), "1.00P")
+    XCTAssertEqual(WidgetLabels.storageRemaining(petabyte * 1024), "1.00E")
+  }
+
+  func testRemainingSpaceRoundsIntoTheNextUnitInsteadOfPrinting1024() {
+    // 1023.6K would print as 1024K, which is the next unit and a different width if left as-is.
+    XCTAssertEqual(WidgetLabels.storageRemaining(Int((1023.6 * 1024).rounded())), "1.00M")
+  }
+
+  func testRemainingSpaceDropsADecimalWhenRoundingWouldAddAColumn() {
+    XCTAssertEqual(WidgetLabels.storageRemaining(Int((99.96 * 1024).rounded())), " 100K")
+    XCTAssertEqual(WidgetLabels.storageRemaining(Int((9.996 * 1024).rounded())), "10.0K")
+  }
+
+  func testRemainingSpaceStaysFiveColumnsAtEveryScale() {
+    var bytes = 1
+    var samples = [0, Int.max]
+    while bytes > 0 && bytes < Int.max / 2 {
+      samples.append(bytes)
+      if bytes > 1 { samples.append(bytes - 1) }
+      samples.append(bytes + 1)
+      bytes *= 2
+    }
+
+    for sample in samples {
+      let text = WidgetLabels.storageRemaining(sample)
+      XCTAssertEqual(text.count, 5, "\(sample) formatted as \(text)")
+      XCTAssertFalse(text.contains("\n"))
+    }
+  }
+
+  func testANegativeRemainingReadingIsShownAsEmpty() {
+    XCTAssertEqual(WidgetLabels.storageRemaining(-1), "   0B")
+  }
+
   // MARK: - Keyboard layouts
 
   func testALayoutNameWithinBudgetIsShownWhole() {

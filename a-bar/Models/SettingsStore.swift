@@ -211,12 +211,50 @@ final class SettingsStore {
   private func write(_ settings: ABarSettings) {
     do {
       let data = try SettingsCodec.encode(settings)
+      guard let destination = writeDestinationResolvingSymlinks() else {
+        print("⚠️ a-bar: \(fileURL.path) is a symlink cycle - not replacing it")
+        return
+      }
       // Skip no-op writes so quitting the app does not churn the file.
-      if let existing = try? Data(contentsOf: fileURL), existing == data { return }
-      try data.write(to: fileURL, options: .atomic)
+      if let existing = try? Data(contentsOf: destination), existing == data { return }
+      // Atomic write renames a temporary file onto the destination. Rename replaces a symlink
+      // with a regular file, so a link at this path is followed and the target is what gets
+      // replaced. The symlink stays.
+      try data.write(to: destination, options: .atomic)
     } catch {
       print("⚠️ a-bar: failed to write \(fileURL.path): \(error.localizedDescription)")
     }
+  }
+
+  /// The file a save should replace.
+  ///
+  /// A symlink is followed, including a chain, until a real path. A relative link is resolved
+  /// against the directory that contains it. A cycle has no file at the end, so the caller
+  /// skips the write rather than replacing one of the links.
+  private func writeDestinationResolvingSymlinks() -> URL? {
+    var current = fileURL
+    var seen = Set<String>()
+
+    while seen.insert(current.path).inserted {
+      let isLink =
+        (try? current.resourceValues(forKeys: [.isSymbolicLinkKey]))?.isSymbolicLink == true
+      guard isLink else { return current }
+      guard let destination = try? fileManager.destinationOfSymbolicLink(atPath: current.path)
+      else { return nil }
+
+      current = resolvedSymlinkTarget(from: current, destination: destination)
+    }
+
+    return nil
+  }
+
+  private func resolvedSymlinkTarget(from url: URL, destination: String) -> URL {
+    if destination.hasPrefix("/") {
+      return URL(fileURLWithPath: destination)
+    }
+    let base = url.deletingLastPathComponent().path
+    let combined = (base as NSString).appendingPathComponent(destination)
+    return URL(fileURLWithPath: (combined as NSString).standardizingPath)
   }
 
   // MARK: - Quarantine

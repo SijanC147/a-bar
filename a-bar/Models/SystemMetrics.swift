@@ -29,6 +29,9 @@ struct StorageVolume: Identifiable, Equatable {
   let url: URL
   let totalBytes: Int
   let usedBytes: Int
+  /// Volume UUID, or the mount path when macOS reports no UUID. Stable across readings, unlike
+  /// `id`, so the storage widget can remember which disks the user chose.
+  let volumeID: String
 
   /// Used share of the volume, `0...1`. An unreadable volume reports a total of zero, which would
   /// divide to NaN and take every threshold with it.
@@ -39,6 +42,16 @@ struct StorageVolume: Identifiable, Equatable {
 
   var fullnessPercent: Int {
     Int((fullness * 100).rounded())
+  }
+
+  /// Bytes still free. Never negative: a volume that reports more used than total has none left.
+  var remainingBytes: Int {
+    max(0, totalBytes - usedBytes)
+  }
+
+  /// The share that is not `fullnessPercent`, so the two readings add to 100.
+  var remainingPercent: Int {
+    max(0, 100 - fullnessPercent)
   }
 
   var formattedTotal: String {

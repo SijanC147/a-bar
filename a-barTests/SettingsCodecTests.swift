@@ -221,6 +221,87 @@ final class SettingsCodecTests: XCTestCase {
     XCTAssertEqual(settings.widgets.cpu.refreshInterval, 0.5)
   }
 
+  func testAMissingLevelBarKeepsThePercentage() {
+    var config = SettingsFixtures.json(SettingsFixtures.settings())
+    SettingsFixtures.set(nil, at: "widgets.sound.showLevelBar", in: &config)
+    SettingsFixtures.set(nil, at: "widgets.mic.showLevelBar", in: &config)
+
+    let (settings, repairs) = decodeSettings(config)
+
+    XCTAssertFalse(settings.widgets.sound.showLevelBar)
+    XCTAssertFalse(settings.widgets.mic.showLevelBar)
+    XCTAssertFalse(SoundWidgetSettings().showLevelBar)
+    XCTAssertFalse(MicWidgetSettings().showLevelBar)
+    XCTAssertTrue(repairs.isEmpty)
+  }
+
+  func testAMissingCpuAndGpuWidgetKeepsTheCombinedDefaults() {
+    var config = SettingsFixtures.json(SettingsFixtures.settings())
+    SettingsFixtures.set(nil, at: "widgets.cpuAndGpu", in: &config)
+
+    let (settings, repairs) = decodeSettings(config)
+
+    XCTAssertEqual(settings.widgets.cpuAndGpu, CPUAndGPUWidgetSettings())
+    XCTAssertTrue(settings.widgets.cpuAndGpu.showIcon)
+    XCTAssertEqual(settings.widgets.cpuAndGpu.refreshInterval, 2)
+    XCTAssertTrue(repairs.isEmpty)
+  }
+
+  func testAMissingTimeMachineWidgetKeepsTheIdleIconAndInterval() {
+    var config = SettingsFixtures.json(SettingsFixtures.settings())
+    SettingsFixtures.set(nil, at: "widgets.timeMachine", in: &config)
+
+    let (settings, repairs) = decodeSettings(config)
+
+    XCTAssertEqual(settings.widgets.timeMachine, TimeMachineWidgetSettings())
+    XCTAssertTrue(settings.widgets.timeMachine.showIcon)
+    XCTAssertEqual(settings.widgets.timeMachine.refreshInterval, 30)
+    XCTAssertTrue(repairs.isEmpty)
+  }
+
+  func testAMissingStorageShownValueStaysOnPercentageUsed() {
+    var config = SettingsFixtures.json(SettingsFixtures.settings())
+    SettingsFixtures.set(nil, at: "widgets.storage.shownValue", in: &config)
+
+    let (settings, repairs) = decodeSettings(config)
+
+    XCTAssertEqual(settings.widgets.storage.shownValue, .percentUsed)
+    XCTAssertEqual(settings.widgets.storage.refreshInterval, StorageWidgetSettings().refreshInterval)
+    XCTAssertTrue(repairs.isEmpty)
+  }
+
+  func testAMissingStorageSelectionShowsEveryDisk() {
+    // Configs written before the disk picker existed have no `selectedVolumes`. That is the
+    // fresh-install default, not an empty choice that would hide every disk.
+    var config = SettingsFixtures.json(SettingsFixtures.settings())
+    SettingsFixtures.set(nil, at: "widgets.storage.selectedVolumes", in: &config)
+
+    let (settings, repairs) = decodeSettings(config)
+
+    XCTAssertNil(settings.widgets.storage.selectedVolumes)
+    XCTAssertEqual(settings.widgets.storage.refreshInterval, StorageWidgetSettings().refreshInterval)
+    XCTAssertTrue(repairs.isEmpty)
+  }
+
+  func testBlankAndDuplicateStorageSelectionsAreDropped() {
+    var settings = ABarSettings()
+    settings.widgets.storage.selectedVolumes = [
+      StorageWidgetSettings.SelectedVolume(id: "  disk-a  ", name: " Backup "),
+      StorageWidgetSettings.SelectedVolume(id: "disk-a", name: "Again"),
+      StorageWidgetSettings.SelectedVolume(id: "   ", name: "Nope"),
+      StorageWidgetSettings.SelectedVolume(id: "disk-b", name: "Photos"),
+    ]
+
+    SettingsCodec.normalize(&settings)
+
+    XCTAssertEqual(
+      settings.widgets.storage.selectedVolumes,
+      [
+        StorageWidgetSettings.SelectedVolume(id: "disk-a", name: "Backup"),
+        StorageWidgetSettings.SelectedVolume(id: "disk-b", name: "Photos"),
+      ])
+  }
+
   func testDefaultsAreTakenFromThePropertyInitializers() {
     // The decoder fallback used to disagree with the property default (4 vs 8), so a fresh
     // install and an upgrade ended up with different padding.

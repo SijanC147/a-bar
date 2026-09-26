@@ -113,8 +113,15 @@ struct TimeIconView: View {
 }
 
 struct DayProgressView: View {
+  enum Axis {
+    case horizontal
+    case vertical
+  }
+
   let progress: Double
   let backgroundColor: Color
+  /// The time widget fills left to right. Sound and mic fill bottom to top.
+  var axis: Axis = .horizontal
 
   @EnvironmentObject var settings: SettingsManager
   
@@ -128,12 +135,16 @@ struct DayProgressView: View {
 
   var body: some View {
     GeometryReader { geometry in
-      ZStack(alignment: .leading) {
+      let fraction = min(max(progress, 0), 1)
+      ZStack(alignment: axis == .horizontal ? .leading : .bottom) {
         Rectangle()
           .fill(theme.minor.opacity(0.05))
         Rectangle()
           .fill(backgroundColor.opacity(0.15))
-          .frame(width: geometry.size.width * progress)
+          .frame(
+            width: axis == .horizontal ? geometry.size.width * fraction : geometry.size.width,
+            height: axis == .vertical ? geometry.size.height * fraction : geometry.size.height
+          )
       }
       .frame(width: geometry.size.width, height: geometry.size.height)
     }
@@ -142,5 +153,25 @@ struct DayProgressView: View {
     .clipShape(
       RoundedRectangle(cornerRadius: globalSettings.barElementsCornerRadius)
     )
+  }
+}
+
+/// The sound and mic widgets with the level bar on: the day-progress fill stood on end, and
+/// the percentage replaced by the icon.
+struct IconLevelBar: View {
+  let systemName: String
+  let progress: Double
+  let color: Color
+
+  var body: some View {
+    ZStack {
+      DayProgressView(progress: progress, backgroundColor: color, axis: .vertical)
+      Image(systemName: systemName)
+        .font(.system(size: 11))
+        .foregroundColor(color)
+        .padding(.horizontal, 6)
+        .padding(.vertical, 4)
+    }
+    .clipped()
   }
 }

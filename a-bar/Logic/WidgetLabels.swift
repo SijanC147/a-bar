@@ -53,6 +53,55 @@ enum WidgetLabels {
     name.lowercased().contains("macintosh") ? "Mac" : name
   }
 
+  /// A storage percentage. Always five columns (`" 100%"`, `"   9%"`), so the bar does not
+  /// resize as the number changes.
+  static func storagePercent(_ percent: Int) -> String {
+    String(format: "%4d%%", min(100, max(0, percent)))
+  }
+
+  /// Free space for the storage widget. Always five columns: smart precision and one unit.
+  ///
+  /// The unit is B below 1024 bytes, then K, M, G, T, P, or E, stepping at powers of 1024.
+  /// Under 10 of a unit the number has two decimals (`1.50G`), under 100 it has one (`12.3G`),
+  /// and from there it is whole (` 512G`). The decimal point is always `.`, so a locale that
+  /// uses a comma cannot make the label a different width.
+  static func storageRemaining(_ bytes: Int) -> String {
+    var value = Double(max(0, bytes))
+    var index = 0
+    while index < storageUnits.count - 1 && storagePromotes(value, fromBytes: index == 0) {
+      value /= 1024
+      index += 1
+    }
+    if index == 0 {
+      return String(format: "%4dB", Int(value.rounded()))
+    }
+    return storageScaled(value) + storageUnits[index]
+  }
+
+  private static let storageUnits = ["B", "K", "M", "G", "T", "P", "E"]
+  private static let storageLocale = Locale(identifier: "en_US_POSIX")
+
+  /// True when rounding this value in its display precision would print 1024 and belong in the
+  /// next unit. Bytes are already whole, so they step at 1024 exactly.
+  private static func storagePromotes(_ value: Double, fromBytes: Bool) -> Bool {
+    if fromBytes { return value >= 1024 }
+    if value >= 1024 { return true }
+    return value >= 100 && value.rounded() >= 1024
+  }
+
+  /// Four characters of magnitude. Precision drops as the number grows so the width stays put,
+  /// including where one decimal would round to `100.0`.
+  private static func storageScaled(_ value: Double) -> String {
+    let hundredths = (value * 100).rounded() / 100
+    if hundredths >= 99.95 {
+      return String(format: "%4.0f", locale: storageLocale, hundredths.rounded())
+    }
+    if hundredths >= 9.995 {
+      return String(format: "%4.1f", locale: storageLocale, hundredths)
+    }
+    return String(format: "%4.2f", locale: storageLocale, hundredths)
+  }
+
   /// A keyboard layout name short enough for the bar.
   ///
   /// The first word is usually the language ("British PC" -> "British"), but a single long word

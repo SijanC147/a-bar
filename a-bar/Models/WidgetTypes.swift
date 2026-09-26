@@ -21,6 +21,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
   case sound = "sound"
   case mic = "mic"
   case keyboard = "keyboard"
+  case timeMachine = "time-machine"
   case github = "github"
   case hackerNews = "hacker-news"
 
@@ -28,6 +29,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
   case cpu = "cpu"
   case memory = "memory"
   case gpu = "gpu"
+  case cpuAndGpu = "cpu-gpu"
   case netstats = "netstats"
   case diskActivity = "disk-activity"
   case storage = "storage"
@@ -53,11 +55,13 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     case .sound: return "Sound"
     case .mic: return "Microphone"
     case .keyboard: return "Keyboard"
+    case .timeMachine: return "Time Machine"
     case .github: return "GitHub"
     case .hackerNews: return "Hacker News"
     case .cpu: return "CPU"
     case .memory: return "Memory"
     case .gpu: return "GPU"
+    case .cpuAndGpu: return "CPU & GPU"
     case .netstats: return "Network Stats"
     case .diskActivity: return "Disk Activity"
     case .storage: return "Storage"
@@ -65,7 +69,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     }
   }
 
-  /// System symbol name for the widget
+  /// System symbol name for the widget. GPU is drawn from `iconAssetName` instead.
   var symbolName: String {
     switch self {
     case .spaces: return "square.grid.2x2"
@@ -81,15 +85,26 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     case .sound: return "speaker.wave.2"
     case .mic: return "mic"
     case .keyboard: return "keyboard"
+    case .timeMachine: return "TimeMachineIcon"
     case .github: return "bell"    
     case .hackerNews: return "newspaper"
     case .cpu: return "cpu"
     case .memory: return "memorychip"
-    case .gpu: return "cpu"
+    case .gpu: return "GPUIcon"
+    case .cpuAndGpu: return "rectangle.split.2x1"
     case .netstats: return "network"
     case .diskActivity: return "internaldrive"
     case .storage: return "externaldrive"
     case .userWidget: return "star"
+    }
+  }
+
+  /// Asset catalog image drawn as a template, when this widget does not use a system symbol.
+  var iconAssetName: String? {
+    switch self {
+    case .gpu: return "GPUIcon"
+    case .timeMachine: return "TimeMachineIcon"
+    default: return nil
     }
   }
 
@@ -100,7 +115,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
       return .yabai
     case .aerospaceSpaces, .aerospaceProcess:
       return .aerospace
-    case .cpu, .memory, .gpu, .netstats, .diskActivity, .storage:
+    case .cpu, .memory, .gpu, .cpuAndGpu, .netstats, .diskActivity, .storage:
       return .graph
     case .userWidget:
       return .custom
@@ -109,6 +124,27 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     }
   }
 
+}
+
+/// Icon for a widget in the bar or the layout palette.
+/// A catalog image is rendered as a template so it takes the surrounding tint.
+struct WidgetTypeIcon: View {
+  let identifier: WidgetIdentifier
+  var systemSymbol: String? = nil
+  var pointSize: CGFloat = 10
+
+  var body: some View {
+    if let assetName = identifier.iconAssetName, systemSymbol == nil {
+      Image(assetName)
+        .renderingMode(.template)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: pointSize, height: pointSize)
+    } else {
+      Image(systemName: systemSymbol ?? identifier.symbolName)
+        .font(.system(size: pointSize))
+    }
+  }
 }
 
 /// Categories for grouping widgets

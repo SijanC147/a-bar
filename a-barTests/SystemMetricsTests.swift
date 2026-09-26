@@ -6,8 +6,9 @@ import XCTest
 final class SystemMetricsTests: XCTestCase {
 
   private func volume(total: Int, used: Int) -> StorageVolume {
-    StorageVolume(name: "Macintosh HD", url: URL(fileURLWithPath: "/"), totalBytes: total,
-      usedBytes: used)
+    StorageVolume(
+      name: "Macintosh HD", url: URL(fileURLWithPath: "/"), totalBytes: total,
+      usedBytes: used, volumeID: "macintosh-hd")
   }
 
   // MARK: - Battery
@@ -53,6 +54,29 @@ final class SystemMetricsTests: XCTestCase {
     XCTAssertEqual(unreadable.fullness, 0)
     XCTAssertFalse(unreadable.fullness.isNaN)
     XCTAssertEqual(unreadable.fullnessPercent, 0)
+  }
+
+  func testRemainingIsTheShareAndTheBytesThatAreNotUsed() {
+    let quarter = volume(total: 1000, used: 250)
+
+    XCTAssertEqual(quarter.remainingBytes, 750)
+    XCTAssertEqual(quarter.remainingPercent, 75)
+    XCTAssertEqual(quarter.fullnessPercent + quarter.remainingPercent, 100)
+  }
+
+  func testAFullVolumeHasNothingRemaining() {
+    let full = volume(total: 1000, used: 996)
+
+    XCTAssertEqual(full.fullnessPercent, 100)
+    XCTAssertEqual(full.remainingPercent, 0)
+    XCTAssertEqual(full.remainingBytes, 4)
+  }
+
+  func testUsedBeyondCapacityDoesNotReportNegativeSpace() {
+    let broken = volume(total: 100, used: 150)
+
+    XCTAssertEqual(broken.remainingBytes, 0)
+    XCTAssertEqual(broken.remainingPercent, 0)
   }
 
   func testTheDisplayedPercentageRoundsRatherThanTruncates() {

@@ -33,6 +33,7 @@ struct MicWidget: View {
 
     BaseWidgetView(
       backgroundColor: globalSettings.noColorInDataWidgets ? theme.minor : bgColor,
+      noPadding: micSettings.showLevelBar,
       onClick: {
         if showPopper {
           showPopper = false
@@ -57,15 +58,24 @@ struct MicWidget: View {
       },
       onRightClick: openSoundPreferences
     ) {
-      HStack(spacing: 4) {
-        if micSettings.showIcon {
-          Image(systemName: micIcon)
-            .font(.system(size: 11))
+      if micSettings.showLevelBar {
+        IconLevelBar(
+          systemName: micIcon,
+          progress: VolumeLevel.levelBarProgress(
+            VolumeLevel.normalize(systemInfo.micLevel), isMuted: systemInfo.isMicMuted),
+          color: fgColor
+        )
+      } else {
+        HStack(spacing: 4) {
+          if micSettings.showIcon {
+            Image(systemName: micIcon)
+              .font(.system(size: 11))
+              .foregroundColor(fgColor)
+          }
+
+          Text(micText)
             .foregroundColor(fgColor)
         }
-
-        Text(micText)
-          .foregroundColor(fgColor)
       }
     }
     .background(

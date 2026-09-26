@@ -303,9 +303,11 @@ enum SettingsCodec {
       (\.cpu.refreshInterval, 0.5),
       (\.memory.refreshInterval, 0.5),
       (\.gpu.refreshInterval, 0.5),
+      (\.cpuAndGpu.refreshInterval, 0.5),
       (\.netstats.refreshInterval, 0.5),
       (\.diskActivity.refreshInterval, 0.5),
       (\.storage.refreshInterval, 10),
+      (\.timeMachine.refreshInterval, 5),
       (\.bluetooth.refreshInterval, 1),
       (\.bluetooth.batteryRefreshInterval, 15),
       (\.wifi.refreshInterval, 5),
@@ -335,6 +337,8 @@ enum SettingsCodec {
     widgets.bluetooth.maxDeviceNameLength = min(max(widgets.bluetooth.maxDeviceNameLength, 1), 100)
     widgets.hackerNews.maxTitleLength = min(max(widgets.hackerNews.maxTitleLength, 10), 200)
     widgets.wifi.maxNetworkNameLength = min(max(widgets.wifi.maxNetworkNameLength, 1), 100)
+    widgets.storage.selectedVolumes = StorageVolumeSelection.normalized(
+      widgets.storage.selectedVolumes)
   }
 
   private static func normalizeUserWidgets(_ widgets: inout [UserWidgetDefinition]) {

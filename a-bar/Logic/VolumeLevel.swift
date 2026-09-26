@@ -37,4 +37,14 @@ enum VolumeLevel {
   static func percentText(_ normalized: Double, isMuted: Bool) -> String {
     isMuted ? "-%" : "\(Int(normalized * 100))%"
   }
+
+  /// How full the icon level bar is, `0...1`.
+  ///
+  /// Muted draws an empty bar. The slash icon is what says muted; a bar left at the old level
+  /// would still look like sound is coming out. The percentage text can show a dash for that
+  /// case, and this bar cannot.
+  static func levelBarProgress(_ normalized: Double, isMuted: Bool) -> Double {
+    guard !isMuted else { return 0 }
+    return min(max(normalized, 0), 1)
+  }
 }

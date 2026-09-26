@@ -49,6 +49,7 @@
 		A1000050 /* CPUWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000050 /* CPUWidget.swift */; };
 		A1000051 /* MemoryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000051 /* MemoryWidget.swift */; };
 		A1000052 /* GPUWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000052 /* GPUWidget.swift */; };
+		A1000144 /* CPUAndGPUWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000144 /* CPUAndGPUWidget.swift */; };
 		A1000053 /* NetstatsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000053 /* NetstatsWidget.swift */; };
 		A1000054 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000054 /* GraphView.swift */; };
 		A1000060 /* UserWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000060 /* UserWidget.swift */; };
@@ -199,6 +200,13 @@
 		A1000257 /* WidgetCommandDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000140 /* WidgetCommandDispatch.swift */; };
 		A1000345 /* UserWidgetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000345 /* UserWidgetManagerTests.swift */; };
 		A1000346 /* WidgetCommandDispatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000346 /* WidgetCommandDispatchTests.swift */; };
+		A1000141 /* StorageVolumeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000141 /* StorageVolumeSelection.swift */; };
+		A1000258 /* StorageVolumeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000141 /* StorageVolumeSelection.swift */; };
+		A1000347 /* StorageVolumeSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000347 /* StorageVolumeSelectionTests.swift */; };
+		A1000142 /* TimeMachineStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000142 /* TimeMachineStatus.swift */; };
+		A1000259 /* TimeMachineStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000142 /* TimeMachineStatus.swift */; };
+		A1000143 /* TimeMachineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000143 /* TimeMachineWidget.swift */; };
+		A1000348 /* TimeMachineStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000348 /* TimeMachineStatusTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -244,6 +252,7 @@
 		B1000050 /* CPUWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUWidget.swift; sourceTree = "<group>"; };
 		B1000051 /* MemoryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryWidget.swift; sourceTree = "<group>"; };
 		B1000052 /* GPUWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPUWidget.swift; sourceTree = "<group>"; };
+		B1000144 /* CPUAndGPUWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUAndGPUWidget.swift; sourceTree = "<group>"; };
 		B1000053 /* NetstatsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetstatsWidget.swift; sourceTree = "<group>"; };
 		B1000054 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		B1000060 /* UserWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWidget.swift; sourceTree = "<group>"; };
@@ -350,6 +359,11 @@
 		B1000140 /* WidgetCommandDispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WidgetCommandDispatch.swift"; sourceTree = "<group>"; };
 		B1000345 /* UserWidgetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserWidgetManagerTests.swift"; sourceTree = "<group>"; };
 		B1000346 /* WidgetCommandDispatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WidgetCommandDispatchTests.swift"; sourceTree = "<group>"; };
+		B1000141 /* StorageVolumeSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageVolumeSelection.swift"; sourceTree = "<group>"; };
+		B1000347 /* StorageVolumeSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageVolumeSelectionTests.swift"; sourceTree = "<group>"; };
+		B1000142 /* TimeMachineStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeMachineStatus.swift"; sourceTree = "<group>"; };
+		B1000143 /* TimeMachineWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineWidget.swift; sourceTree = "<group>"; };
+		B1000348 /* TimeMachineStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeMachineStatusTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -483,6 +497,7 @@
 				B1000045 /* SoundWidget.swift */,
 				B1000046 /* MicWidget.swift */,
 				B1000047 /* KeyboardWidget.swift */,
+				B1000143 /* TimeMachineWidget.swift */,
 				B1000048 /* GitHubWidget.swift */,
 				B1000049 /* BluetoothWidget.swift */,
 			);
@@ -496,6 +511,7 @@
 				B1000050 /* CPUWidget.swift */,
 				B1000051 /* MemoryWidget.swift */,
 				B1000052 /* GPUWidget.swift */,
+				B1000144 /* CPUAndGPUWidget.swift */,
 				B1000053 /* NetstatsWidget.swift */,
 				B1000054 /* GraphView.swift */,
 			);
@@ -577,6 +593,8 @@
 				B1000126 /* WifiScan.swift */,
 				B1000127 /* AerospaceMerge.swift */,
 				B1000131 /* WindowFilter.swift */,
+				B1000141 /* StorageVolumeSelection.swift */,
+				B1000142 /* TimeMachineStatus.swift */,
 				B1000132 /* LaunchAtLoginReconciler.swift */,
 				B1000133 /* BarWindowPlan.swift */,
 				B1000134 /* WindowManagerServices.swift */,
@@ -625,6 +643,8 @@
 				B1000319 /* AppIconProviderTests.swift */,
 				B1000320 /* YabaiJSONSanitizerTests.swift */,
 				B1000321 /* SystemMetricsTests.swift */,
+				B1000347 /* StorageVolumeSelectionTests.swift */,
+				B1000348 /* TimeMachineStatusTests.swift */,
 				B1000322 /* RateSamplerTests.swift */,
 				B1000323 /* BluetoothProfileParserTests.swift */,
 				B1000324 /* WifiScanTests.swift */,
@@ -653,6 +673,61 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXAggregateTarget section */
+		T1000003 /* CopyAppToCheckout */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = X1000003 /* Build configuration list for PBXAggregateTarget "CopyAppToCheckout" */;
+			buildPhases = (
+				H1000001 /* Copy a-bar.app to checkout */,
+			);
+			dependencies = (
+				K1000001 /* PBXTargetDependency */,
+			);
+			name = CopyAppToCheckout;
+			productName = CopyAppToCheckout;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		K1000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = P1000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T1000001;
+			remoteInfo = "a-bar";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		H1000001 /* Copy a-bar.app to checkout */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy a-bar.app to checkout";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "\"$SRCROOT/scripts/copy-app-to-checkout.sh\" --apply\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		K1000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T1000001 /* a-bar */;
+			targetProxy = K1000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXNativeTarget section */
 		T1000001 /* a-bar */ = {
@@ -718,6 +793,7 @@
 			targets = (
 				T1000001 /* a-bar */,
 				T1000002 /* a-barTests */,
+				T1000003 /* CopyAppToCheckout */,
 			);
 		};
 /* End PBXProject section */
@@ -781,6 +857,7 @@
 				A1000050 /* CPUWidget.swift in Sources */,
 				A1000051 /* MemoryWidget.swift in Sources */,
 				A1000052 /* GPUWidget.swift in Sources */,
+				A1000144 /* CPUAndGPUWidget.swift in Sources */,
 				A1000053 /* NetstatsWidget.swift in Sources */,
 				A1000054 /* GraphView.swift in Sources */,
 				A1000060 /* UserWidget.swift in Sources */,
@@ -826,6 +903,9 @@
 				A1000129 /* BluetoothTypes.swift in Sources */,
 				A1000130 /* WifiTypes.swift in Sources */,
 				A1000131 /* WindowFilter.swift in Sources */,
+				A1000141 /* StorageVolumeSelection.swift in Sources */,
+				A1000142 /* TimeMachineStatus.swift in Sources */,
+				A1000143 /* TimeMachineWidget.swift in Sources */,
 				A1000132 /* LaunchAtLoginReconciler.swift in Sources */,
 				A1000133 /* BarWindowPlan.swift in Sources */,
 				A1000134 /* WindowManagerServices.swift in Sources */,
@@ -875,6 +955,10 @@
 				A1000319 /* AppIconProviderTests.swift in Sources */,
 				A1000320 /* YabaiJSONSanitizerTests.swift in Sources */,
 				A1000321 /* SystemMetricsTests.swift in Sources */,
+				A1000258 /* StorageVolumeSelection.swift in Sources */,
+				A1000347 /* StorageVolumeSelectionTests.swift in Sources */,
+				A1000259 /* TimeMachineStatus.swift in Sources */,
+				A1000348 /* TimeMachineStatusTests.swift in Sources */,
 				A1000322 /* RateSamplerTests.swift in Sources */,
 				A1000323 /* BluetoothProfileParserTests.swift in Sources */,
 				A1000324 /* WifiScanTests.swift in Sources */,
@@ -1160,6 +1244,26 @@
 			};
 			name = Release;
 		};
+		Y1000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		Y1000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1186,6 +1290,15 @@
 			buildConfigurations = (
 				Y1000003 /* Debug */,
 				Y1000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		X1000003 /* Build configuration list for PBXAggregateTarget "CopyAppToCheckout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				Y1000005 /* Debug */,
+				Y1000006 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

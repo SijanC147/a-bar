@@ -31,6 +31,13 @@ struct SettingsView: View {
           Label("GitHub", systemImage: "chevron.left.forwardslash.chevron.right").tag(
             SettingsTab.github)
           Label("Hacker News", systemImage: "newspaper").tag(SettingsTab.hackerNews)
+          Label {
+            Text("Time Machine")
+          } icon: {
+            Image("TimeMachineIcon")
+              .renderingMode(.template)
+          }
+          .tag(SettingsTab.timeMachine)
           Label("Custom", systemImage: "star").tag(SettingsTab.custom)
         }
         Section {
@@ -79,6 +86,8 @@ struct SettingsView: View {
               GitHubSettingsView()
             case .hackerNews:
               HackerNewsSettingsView()
+            case .timeMachine:
+              TimeMachineSettingsView()
             case .custom:
               CustomWidgetSettingsView()
             case .about:
@@ -131,6 +140,7 @@ enum SettingsTab: String, CaseIterable {
   case systemStats
   case github
   case hackerNews
+  case timeMachine
   case custom
   case about
 }

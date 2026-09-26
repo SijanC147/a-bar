@@ -32,6 +32,9 @@ fastlane/screenshots
 # macOS
 .DS_Store
 
+# Signed app copied to the checkout root. The rest of DerivedData stays outside the repo.
+/a-bar.app
+
 # Editor
 .idea/
 .vscode/

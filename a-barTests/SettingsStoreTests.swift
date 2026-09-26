@@ -28,6 +28,10 @@ final class SettingsStoreTests: XCTestCase {
     SettingsStore(fileURL: fileURL, userDefaults: defaults, writeDelay: 0)
   }
 
+  private func isSymbolicLink(_ url: URL) throws -> Bool {
+    try url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink == true
+  }
+
   private func quarantineFiles(kind: String) throws -> [URL] {
     try FileManager.default
       .contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
@@ -139,6 +143,65 @@ final class SettingsStoreTests: XCTestCase {
     store.flush()
 
     XCTAssertEqual(makeStore().load().settings.global.barHeight, 44)
+  }
+
+  func testSaveFollowsASymlinkAndLeavesItInPlace() throws {
+    let target = directory.appendingPathComponent("real").appendingPathComponent("config")
+    try FileManager.default.createDirectory(
+      at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try FileManager.default.createSymbolicLink(at: fileURL, withDestinationURL: target)
+    let linkBefore = try FileManager.default.destinationOfSymbolicLink(atPath: fileURL.path)
+
+    let store = makeStore()
+    var settings = SettingsFixtures.settings()
+    settings.global.barHeight = 47
+    store.save(settings)
+    store.flush()
+
+    XCTAssertTrue(try isSymbolicLink(fileURL))
+    XCTAssertEqual(
+      try FileManager.default.destinationOfSymbolicLink(atPath: fileURL.path), linkBefore)
+    XCTAssertEqual(try Data(contentsOf: target), try Data(contentsOf: fileURL))
+    XCTAssertEqual(makeStore().load().settings.global.barHeight, 47)
+  }
+
+  func testSaveFollowsARelativeSymlink() throws {
+    try FileManager.default.createDirectory(
+      at: directory.appendingPathComponent("nested"), withIntermediateDirectories: true)
+    try FileManager.default.createSymbolicLink(
+      atPath: fileURL.path, withDestinationPath: "nested/config")
+
+    let store = makeStore()
+    var settings = SettingsFixtures.settings()
+    settings.global.barHeight = 48
+    store.save(settings)
+    store.flush()
+
+    XCTAssertEqual(
+      try FileManager.default.destinationOfSymbolicLink(atPath: fileURL.path), "nested/config")
+    XCTAssertTrue(try isSymbolicLink(fileURL))
+    XCTAssertEqual(makeStore().load().settings.global.barHeight, 48)
+    XCTAssertEqual(
+      try Data(contentsOf: directory.appendingPathComponent("nested/config")),
+      try Data(contentsOf: fileURL))
+  }
+
+  func testSaveFollowsAChainOfSymlinks() throws {
+    let middle = directory.appendingPathComponent("middle")
+    let target = directory.appendingPathComponent("final-config")
+    try FileManager.default.createSymbolicLink(at: middle, withDestinationURL: target)
+    try FileManager.default.createSymbolicLink(at: fileURL, withDestinationURL: middle)
+
+    let store = makeStore()
+    var settings = SettingsFixtures.settings()
+    settings.global.barHeight = 49
+    store.save(settings)
+    store.flush()
+
+    XCTAssertTrue(try isSymbolicLink(fileURL))
+    XCTAssertTrue(try isSymbolicLink(middle))
+    XCTAssertFalse(try isSymbolicLink(target))
+    XCTAssertEqual(makeStore().load().settings.global.barHeight, 49)
   }
 
   func testSaveIsDebouncedIntoOneWrite() throws {

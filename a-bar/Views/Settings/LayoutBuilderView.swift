@@ -939,8 +939,11 @@ struct WidgetInstanceRowView: View {
 
       // Widget info
       HStack(spacing: 6) {
-        Image(systemName: widgetIcon)
-          .font(.system(size: 12))
+        WidgetTypeIcon(
+          identifier: widget.identifier,
+          systemSymbol: widget.identifier == .userWidget ? "terminal" : nil,
+          pointSize: 12
+        )
         Text(widgetDisplayName)
           .font(.caption)
       }
@@ -970,13 +973,6 @@ struct WidgetInstanceRowView: View {
       return settings.draftSettings.userWidgets[index].name
     }
     return widget.identifier.displayName
-  }
-
-  private var widgetIcon: String {
-    if widget.identifier == .userWidget {
-      return "terminal"
-    }
-    return widget.identifier.symbolName
   }
 }
 
@@ -1099,8 +1095,11 @@ struct DraggableWidgetView: View {
 
   var body: some View {
     HStack(spacing: 4) {
-      Image(systemName: icon)
-        .font(.system(size: 10))
+      WidgetTypeIcon(
+        identifier: identifier,
+        systemSymbol: identifier.iconAssetName == nil ? icon : nil,
+        pointSize: 10
+      )
       Text(name)
         .font(.caption)
     }

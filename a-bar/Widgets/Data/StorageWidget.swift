@@ -14,13 +14,22 @@ struct StorageWidget: View {
         ThemeManager.currentTheme(for: settings.settings.theme)
     }
 
+    private var storageSettings: StorageWidgetSettings {
+        settings.settings.widgets.storage
+    }
+
+    private var visibleVolumes: [StorageVolume] {
+        StorageVolumeSelection.visibleVolumes(
+            storageInfo.volumes, selected: storageSettings.selectedVolumes)
+    }
+
     var body: some View {
         BaseWidgetView(
             noPadding: true,
             onClick: openDiskUtility
         ) {
             HStack(spacing: 6) {
-                ForEach(storageInfo.volumes) { volume in
+                ForEach(visibleVolumes) { volume in
                     HStack(spacing: 4) {
                         ZStack(alignment: .bottom) {
                             RoundedRectangle(cornerRadius: 3)
@@ -31,9 +40,11 @@ struct StorageWidget: View {
                                 .foregroundColor(barColor(for: volume))
                         }
                         VStack(alignment: .leading) {
-                            Text("\(volume.fullnessPercent)%")
+                            Text(shownValue(for: volume))
                                 .font(.system(size: 9, weight: .bold, design: .monospaced))
                                 .foregroundColor(theme.foreground)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
                             Text(shortName(for: volume.name))
                                 .font(.system(size: 8))
                                 .foregroundColor(theme.foreground.opacity(0.7))
@@ -47,6 +58,17 @@ struct StorageWidget: View {
             }
             .padding(.vertical, 2)
             .padding(.horizontal, 6)
+        }
+    }
+
+    private func shownValue(for volume: StorageVolume) -> String {
+        switch storageSettings.shownValue {
+        case .percentUsed:
+            return WidgetLabels.storagePercent(volume.fullnessPercent)
+        case .percentRemaining:
+            return WidgetLabels.storagePercent(volume.remainingPercent)
+        case .spaceRemaining:
+            return WidgetLabels.storageRemaining(volume.remainingBytes)
         }
     }
 

@@ -21,6 +21,7 @@ class SystemInfoService: ObservableObject {
     @Published private(set) var isMicMuted: Bool = false
     @Published private(set) var audioInputDeviceName: String = ""
     @Published private(set) var keyboardLayout: String = ""
+    @Published private(set) var timeMachine: TimeMachineBackupState = .idle
     @Published private(set) var isCaffeinateActive: Bool = false
     private var caffeinateProcess: Process?
     private var caffeinateProcessKeepAlive: Process?
@@ -99,7 +100,8 @@ class SystemInfoService: ObservableObject {
         case .volume: refreshVolume()
         case .mic: refreshMic()
         case .keyboard: refreshKeyboard()
-        case .storageVolumes: refreshVolumes()
+        case .storageVolumes: refreshStorageVolumes()
+        case .timeMachine: refreshTimeMachine()
         }
     }
 
@@ -856,6 +858,22 @@ class SystemInfoService: ObservableObject {
         }
     }
 
+    func refreshTimeMachine() {
+        Task {
+            async let status = Self.tmutil(["status"])
+            async let phase = Self.tmutil(["currentphase"])
+            let state = TimeMachineStatus.state(status: await status, phase: await phase)
+            await MainActor.run {
+                if self.timeMachine != state { self.timeMachine = state }
+            }
+        }
+    }
+
+    /// Public `tmutil` only. A missing or failed command is empty text, which the parser treats as idle.
+    private static func tmutil(_ arguments: [String]) async -> String {
+        (try? await ShellExecutor.run(executable: "/usr/bin/tmutil", arguments: arguments)) ?? ""
+    }
+
     private func getCurrentKeyboardLayout() -> String {
         if let source = TISCopyCurrentKeyboardInputSource()?.takeRetainedValue(),
             let namePtr = TISGetInputSourceProperty(source, kTISPropertyLocalizedName)
@@ -995,14 +1013,15 @@ class SystemInfoService: ObservableObject {
         }
     }
 
-    private func refreshVolumes() {
+    func refreshStorageVolumes() {
         DispatchQueue.global(qos: .utility).async {
             let keys: Set<URLResourceKey> = [
                 .volumeNameKey,
                 .volumeTotalCapacityKey,
                 .volumeAvailableCapacityKey,
                 .volumeIsRemovableKey,
-                .volumeIsInternalKey
+                .volumeIsInternalKey,
+                .volumeUUIDStringKey,
             ]
             let urls = FileManager.default.mountedVolumeURLs(
                 includingResourceValuesForKeys: Array(keys),
@@ -1018,7 +1037,9 @@ class SystemInfoService: ObservableObject {
                     name: name,
                     url: url,
                     totalBytes: total,
-                    usedBytes: total - available
+                    usedBytes: total - available,
+                    volumeID: StorageVolumeSelection.identity(
+                        uuid: values.volumeUUIDString, mountPath: url.path)
                 )
             }
             DispatchQueue.main.async {
@@ -1035,6 +1056,6 @@ class SystemInfoService: ObservableObject {
 
     @objc private func handleMount(_ notification: Notification) {
         guard activeWidgets.contains(.storage) else { return }
-        refreshVolumes()
+        refreshStorageVolumes()
     }
 }

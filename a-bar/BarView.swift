@@ -153,6 +153,8 @@ struct WidgetContainer: View {
         MicWidget(position: position)
       case .keyboard:
         KeyboardWidget()
+      case .timeMachine:
+        TimeMachineWidget()
       case .github:
         GitHubWidget()
       case .hackerNews:
@@ -163,6 +165,8 @@ struct WidgetContainer: View {
         MemoryWidget()
       case .gpu:
         GPUWidget()
+      case .cpuAndGpu:
+        CPUAndGPUWidget()
       case .netstats:
         NetstatsWidget()
       case .diskActivity:

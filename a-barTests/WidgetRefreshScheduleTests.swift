@@ -13,11 +13,21 @@ final class WidgetRefreshScheduleTests: XCTestCase {
             .cpu: .cpu, .memory: .memory, .gpu: .gpu,
             .netstats: .networkStats, .diskActivity: .diskStats,
             .sound: .volume, .mic: .mic, .keyboard: .keyboard,
-            .storage: .storageVolumes,
+            .storage: .storageVolumes, .timeMachine: .timeMachine,
         ]
         for (widget, reading) in expected {
             XCTAssertEqual(WidgetRefreshSchedule.readings(for: widget), [reading], "\(widget)")
         }
+    }
+
+    func testTheMergedCpuAndGpuWidgetCollectsBothReadings() {
+        XCTAssertEqual(WidgetRefreshSchedule.readings(for: .cpuAndGpu), [.cpu, .gpu])
+    }
+
+    func testTheMergedWidgetDoesNotSampleCpuOrGpuASecondTime() {
+        let readings = WidgetRefreshSchedule.readings(for: [.cpu, .gpu, .cpuAndGpu])
+
+        XCTAssertEqual(readings, Set([WidgetRefreshSchedule.Reading.cpu, .gpu]))
     }
 
     func testTheBatteryWidgetAlsoCollectsCaffeinate() {

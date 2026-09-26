@@ -12,7 +12,7 @@ enum WidgetRefreshSchedule {
   /// the caller stays free to collect them however it likes.
   enum Reading: String, CaseIterable, Equatable {
     case battery, caffeinate, cpu, memory, gpu
-    case networkStats, diskStats, volume, mic, keyboard, storageVolumes
+    case networkStats, diskStats, volume, mic, keyboard, storageVolumes, timeMachine
   }
 
   /// What one refresh of this widget has to collect.
@@ -26,12 +26,14 @@ enum WidgetRefreshSchedule {
     case .cpu: return [.cpu]
     case .memory: return [.memory]
     case .gpu: return [.gpu]
+    case .cpuAndGpu: return [.cpu, .gpu]
     case .netstats: return [.networkStats]
     case .diskActivity: return [.diskStats]
     case .sound: return [.volume]
     case .mic: return [.mic]
     case .keyboard: return [.keyboard]
     case .storage: return [.storageVolumes]
+    case .timeMachine: return [.timeMachine]
     default: return []
     }
   }
@@ -49,12 +51,14 @@ enum WidgetRefreshSchedule {
     case .cpu: return settings.cpu.refreshInterval
     case .memory: return settings.memory.refreshInterval
     case .gpu: return settings.gpu.refreshInterval
+    case .cpuAndGpu: return settings.cpuAndGpu.refreshInterval
     case .netstats: return settings.netstats.refreshInterval
     case .diskActivity: return settings.diskActivity.refreshInterval
     case .sound: return settings.sound.refreshInterval
     case .mic: return settings.mic.refreshInterval
     case .keyboard: return settings.keyboard.refreshInterval
     case .storage: return settings.storage.refreshInterval
+    case .timeMachine: return settings.timeMachine.refreshInterval
     default: return nil
     }
   }

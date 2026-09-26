@@ -406,6 +406,7 @@ struct AudioSettingsView: View, ABarSettingsBindable {
         Section {
           Text("Sound").font(.headline)
           Toggle("Show icon", isOn: binding(\.widgets.sound.showIcon))
+          Toggle("Show level bar", isOn: binding(\.widgets.sound.showLevelBar))
 
           HStack(spacing: 4) {
             Text("Refresh interval")
@@ -432,6 +433,7 @@ struct AudioSettingsView: View, ABarSettingsBindable {
         Section {
           Text("Microphone").font(.headline)
           Toggle("Show icon", isOn: binding(\.widgets.mic.showIcon))
+          Toggle("Show level bar", isOn: binding(\.widgets.mic.showLevelBar))
 
           HStack(spacing: 4) {
             Text("Refresh interval")
@@ -486,6 +488,7 @@ struct AudioSettingsView: View, ABarSettingsBindable {
 
 struct SystemStatsSettingsView: View, ABarSettingsBindable {
   @EnvironmentObject var settings: SettingsManager
+  @ObservedObject private var systemInfo = SystemInfoService.shared
 
   var body: some View {
     Form {
@@ -581,6 +584,24 @@ struct SystemStatsSettingsView: View, ABarSettingsBindable {
 
         Divider()
 
+        // CPU & GPU
+        Section {
+          Text("CPU & GPU").font(.headline)
+          Toggle("Show icon", isOn: binding(\.widgets.cpuAndGpu.showIcon))
+
+          HStack(spacing: 4) {
+            Text("Refresh interval")
+            TextField(
+              "", value: binding(\.widgets.cpuAndGpu.refreshInterval), formatter: NumberFormatter()
+            )
+            .frame(width: 60)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            Text("seconds")
+          }
+        }
+
+        Divider()
+
         // Storage
         Section {
           Text("Storage").font(.headline)
@@ -593,6 +614,37 @@ struct SystemStatsSettingsView: View, ABarSettingsBindable {
             .frame(width: 60)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             Text("seconds")
+          }
+
+          HStack(spacing: 4) {
+            Text("Show")
+            Picker("", selection: storageShownValueBinding) {
+              ForEach(StorageWidgetSettings.ShownValue.allCases, id: \.self) { value in
+                Text(value.label).tag(value)
+              }
+            }
+            .pickerStyle(MenuPickerStyle())
+            .frame(width: 180)
+          }
+
+          Toggle("Show every disk", isOn: showEveryDisk)
+          Text(storageSelectionCaption)
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+
+          if settings.draftSettings.widgets.storage.selectedVolumes != nil {
+            let choices = StorageVolumeSelection.choices(
+              mounted: systemInfo.volumes,
+              selected: settings.draftSettings.widgets.storage.selectedVolumes)
+            if choices.isEmpty {
+              Text("No disks are connected.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            } else {
+              ForEach(choices) { choice in
+                Toggle(storageDiskLabel(choice), isOn: diskSelectionBinding(for: choice))
+              }
+            }
           }
         }
 
@@ -667,6 +719,68 @@ struct SystemStatsSettingsView: View, ABarSettingsBindable {
       .padding()
     }
     .navigationTitle("System Stats")
+    .onAppear {
+      systemInfo.refreshStorageVolumes()
+    }
+    .onReceive(workspacePublisher(for: NSWorkspace.didMountNotification)) { _ in
+      systemInfo.refreshStorageVolumes()
+    }
+    .onReceive(workspacePublisher(for: NSWorkspace.didUnmountNotification)) { _ in
+      systemInfo.refreshStorageVolumes()
+    }
+  }
+
+  private func workspacePublisher(
+    for name: Notification.Name
+  ) -> NotificationCenter.Publisher {
+    NSWorkspace.shared.notificationCenter.publisher(for: name)
+  }
+
+  private var storageShownValueBinding: Binding<StorageWidgetSettings.ShownValue> {
+    Binding(
+      get: { settings.draftSettings.widgets.storage.shownValue },
+      set: { settings.draftSettings.widgets.storage.shownValue = $0 }
+    )
+  }
+
+  private var showEveryDisk: Binding<Bool> {
+    Binding(
+      get: { settings.draftSettings.widgets.storage.selectedVolumes == nil },
+      set: { showAll in
+        if showAll {
+          settings.draftSettings.widgets.storage.selectedVolumes = nil
+        } else if settings.draftSettings.widgets.storage.selectedVolumes == nil {
+          settings.draftSettings.widgets.storage.selectedVolumes =
+            StorageVolumeSelection.explicitSelection(of: systemInfo.volumes)
+        }
+      }
+    )
+  }
+
+  private var storageSelectionCaption: String {
+    if settings.draftSettings.widgets.storage.selectedVolumes == nil {
+      return "Every connected disk appears, including disks you connect later."
+    }
+    return "Only selected disks appear. A disk you disconnect stays selected. A new disk stays hidden until you select it."
+  }
+
+  private func storageDiskLabel(_ choice: StorageVolumeSelection.Choice) -> String {
+    choice.isMounted ? choice.name : "\(choice.name) (not connected)"
+  }
+
+  private func diskSelectionBinding(for choice: StorageVolumeSelection.Choice) -> Binding<Bool> {
+    Binding(
+      get: { choice.isSelected },
+      set: { isOn in
+        settings.draftSettings.widgets.storage.selectedVolumes = StorageVolumeSelection.toggling(
+          id: choice.id,
+          name: choice.name,
+          isOn: isOn,
+          selected: settings.draftSettings.widgets.storage.selectedVolumes,
+          mounted: systemInfo.volumes
+        )
+      }
+    )
   }
 
   private var cpuMonitorAppBinding: Binding<CPUWidgetSettings.MonitorApp> {
@@ -779,6 +893,28 @@ struct HackerNewsSettingsView: View, ABarSettingsBindable {
       .padding()
     }
     .navigationTitle("Hacker News")
+  }
+}
+
+struct TimeMachineSettingsView: View, ABarSettingsBindable {
+  @EnvironmentObject var settings: SettingsManager
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("Time Machine").font(.headline)
+      Toggle("Show icon", isOn: binding(\.widgets.timeMachine.showIcon))
+
+      HStack(spacing: 4) {
+        Text("Refresh interval")
+        TextField(
+          "", value: binding(\.widgets.timeMachine.refreshInterval), formatter: NumberFormatter()
+        )
+        .frame(width: 60)
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        Text("seconds")
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
 

@@ -33,6 +33,7 @@ struct SoundWidget: View {
 
     BaseWidgetView(
       backgroundColor: globalSettings.noColorInDataWidgets ? theme.minor : bgColor,
+      noPadding: soundSettings.showLevelBar,
       onClick: {
         if showPopper {
           showPopper = false
@@ -57,15 +58,23 @@ struct SoundWidget: View {
       },
       onRightClick: openSoundPreferences
     ) {
-      HStack(spacing: 4) {
-        if soundSettings.showIcon {
-          Image(systemName: volumeIcon)
-            .font(.system(size: 11))
+      if soundSettings.showLevelBar {
+        IconLevelBar(
+          systemName: volumeIcon,
+          progress: VolumeLevel.levelBarProgress(normalizedVolume, isMuted: systemInfo.isMuted),
+          color: fgColor
+        )
+      } else {
+        HStack(spacing: 4) {
+          if soundSettings.showIcon {
+            Image(systemName: volumeIcon)
+              .font(.system(size: 11))
+              .foregroundColor(fgColor)
+          }
+
+          Text(volumeText)
             .foregroundColor(fgColor)
         }
-
-        Text(volumeText)
-          .foregroundColor(fgColor)
       }
     }
     .background(

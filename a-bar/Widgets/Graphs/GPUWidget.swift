@@ -52,8 +52,7 @@ struct GPUWidget: View {
           // Icon overlay anchored to the left
           HStack {
             if gpuSettings.showIcon {
-              Image(systemName: "cpu")
-                .font(.system(size: 10))
+              WidgetTypeIcon(identifier: .gpu, pointSize: 10)
                 .foregroundColor(graphColor)
                 .padding(.leading, 6)
                 .padding(.top, -6)
