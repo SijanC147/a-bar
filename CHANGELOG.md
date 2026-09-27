@@ -6,7 +6,11 @@ All notable changes to this project will be documented in this file.
 
 _No changes yet._
 
-## v1.7.0 - 2026-09-27
+## v1.7.1 - 2026-09-27
+
+- ci: pin the Hextap release caller to hextap-toolkit v0.8.1. Toolkit v0.8.0 ran a Bun check before an Xcode project's quality commands, so the v1.7.0 release never built. v1.7.1 ships the v1.7.0 changes below.
+
+## v1.7.0 - 2026-09-27 (tagged, not published)
 
 First release of the SijanC147 fork, published as a Homebrew Cask through Hextap.
 
