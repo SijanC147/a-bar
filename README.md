@@ -1,9 +1,12 @@
 # <img src="./images/a-bar-logo.png" width="200" alt="a-bar" />
 
-[![Version](https://raw.githubusercontent.com/Jean-Tinland/a-bar/badges/version.svg?v=1)](https://github.com/Jean-Tinland/a-bar/releases/latest)
-[![Tests](https://github.com/Jean-Tinland/a-bar/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Jean-Tinland/a-bar/actions/workflows/tests.yml)
-[![Global coverage](https://raw.githubusercontent.com/Jean-Tinland/a-bar/badges/coverage.svg?v=1)](https://github.com/Jean-Tinland/a-bar/actions/workflows/tests.yml)
-[![Logic coverage](https://raw.githubusercontent.com/Jean-Tinland/a-bar/badges/logic.svg?v=1)](https://github.com/Jean-Tinland/a-bar/actions/workflows/tests.yml)
+[![Version](https://raw.githubusercontent.com/SijanC147/a-bar/badges/version.svg?v=1)](https://github.com/SijanC147/a-bar/releases/latest)
+[![Tests](https://github.com/SijanC147/a-bar/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/SijanC147/a-bar/actions/workflows/tests.yml)
+[![Global coverage](https://raw.githubusercontent.com/SijanC147/a-bar/badges/coverage.svg?v=1)](https://github.com/SijanC147/a-bar/actions/workflows/tests.yml)
+[![Logic coverage](https://raw.githubusercontent.com/SijanC147/a-bar/badges/logic.svg?v=1)](https://github.com/SijanC147/a-bar/actions/workflows/tests.yml)
+
+> [!IMPORTANT]
+> **This is a fork.** [SijanC147/a-bar](https://github.com/SijanC147/a-bar) is Sean Bugeja's fork of [Jean-Tinland/a-bar](https://github.com/Jean-Tinland/a-bar), by Jean Tinland. It adds a storage widget with disk and value choices, a Time Machine widget, a combined CPU & GPU graph, and level bars for sound and microphone, starting at v1.7.0. Releases on this page are built from the fork. For upstream builds, issues and support, use the upstream repository.
 
 Yet **a(nother) bar** :)
 
@@ -60,7 +63,9 @@ You'll find the full installation guide in the [documentation](https://www.jeant
 
 Here's a quick summary:
 
-### Homebrew
+### Homebrew (upstream builds)
+
+Upstream's tap installs Jean Tinland's builds, not this fork's:
 
 ```bash
 brew tap Jean-Tinland/a-bar
@@ -70,9 +75,9 @@ brew install --cask a-bar
 > [!WARNING]
 > **Note:** [Homebrew installation](https://github.com/Jean-Tinland/homebrew-a-bar/blob/main/Casks/a-bar.rb) script automatically removes the `com.apple.quarantine` attribute. That way the app should work out of the box without having to open System Settings to allow it.
 
-### Manual installation
+### Manual installation (this fork)
 
-1. Download the latest release from the [Releases](https://github.com/Jean-Tinland/a-bar/releases) page
+1. Download the latest release from this fork's [Releases](https://github.com/SijanC147/a-bar/releases) page: `a-bar-darwin-arm64.zip` for Apple silicon, `a-bar-darwin-amd64.zip` for Intel
 2. Move `a-bar.app` to `/Applications`
 3. As the app is not notarized you will need to do the following:
    - before launching the app for the first time: run the following command in Terminal: `xattr -rd com.apple.quarantine /Applications/_a-bar_.app` then launch _a-bar_
