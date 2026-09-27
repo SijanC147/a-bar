@@ -61,10 +61,20 @@ notarized and is ad-hoc signed.
 
 ## Distribution (Hextap)
 
-a-bar is to be published through Sean's Homebrew tap as a Cask. Toolkit support shipped in
-hextap-toolkit v0.8.0 (manifest schema 3, `runtime: "xcode"`). a-bar is not onboarded yet.
-The step-by-step path is in the Hextap onboarding handoff linked from `KICKOFF.md`; the
-`hextap` skill and `hextap --help` are authoritative for commands.
+a-bar ships as a Cask through Sean's private Homebrew tap `SijanC147/homebrew-hextap`
+(schema 3, `runtime: "xcode"`). Onboarded 2026-09-27; the owned files are `.hextap.json`,
+`.hextap/`, `scripts/hextap-build` and `.github/workflows/hextap-release.yml`, the caller
+pinned to hextap-toolkit v0.8.1. Regenerate them with `hextap onboard`, never by hand:
+`hextap validate` compares `.hextap/SETUP.md` byte for byte, pin included.
+
+- A `v*` tag on `main` builds, verifies and publishes an immutable release with
+  `a-bar-darwin-arm64.zip`, `a-bar-darwin-amd64.zip` and `SHA256SUMS`.
+- The tap owns the reviewed `Casks/a-bar.rb`; a release rewrites only its `version` and
+  `sha256 arm:/intel:` lines. Homebrew 7 refuses a Ruby `postflight` block, so the quarantine
+  removal is a `postflight_steps` `run`.
+- Tags are immutable (ruleset `hextap/release-tags`). A failed release is fixed forward with a
+  new tag, never by moving one; v1.7.0 is tagged and unpublished for that reason.
+- `main` requires a PR and the `Unit tests` check (ruleset `hextap/main`).
 
 ## Tracking
 
