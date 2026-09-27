@@ -1345,6 +1345,11 @@ struct CustomWidgetEditorView: View {
 }
 
 struct AboutView: View {
+  /// The release version, which the build sets from MARKETING_VERSION.
+  private var appVersion: String {
+    Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+  }
+
   var body: some View {
     VStack(spacing: 10) {
       Image("AppLogo")
@@ -1360,7 +1365,7 @@ struct AboutView: View {
         .font(.headline)
         .foregroundColor(.secondary)
 
-      Text("Version 1.6.0")
+      Text("Version \(appVersion)")
         .font(.caption)
 
       Divider()
