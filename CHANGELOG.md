@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 _No changes yet._
 
+## v1.7.5 - 2026-09-27
+
+- fix: the Solar Times widget finds its location when the Weather widget has no custom location (the IP lookup was blocked), keeps retrying until it does, and shows a visible placeholder meanwhile
+
 ## v1.7.4 - 2026-09-27
 
 - feat: Solar Times widget showing the next sunrise, sunset, solar noon, golden hour, blue hour or twilight, as a time or a countdown, with a popover listing the whole day. The events it shows are chosen in its settings, and it uses the Weather widget's location.
