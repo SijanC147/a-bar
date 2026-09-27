@@ -1378,13 +1378,13 @@ struct AboutView: View {
 
       HStack {
         Button("GitHub") {
-          if let url = URL(string: "https://github.com/Jean-Tinland/a-bar") {
+          if let url = URL(string: "https://github.com/SijanC147/a-bar") {
             NSWorkspace.shared.open(url)
           }
         }
 
         Button("Report Issue") {
-          if let url = URL(string: "https://github.com/Jean-Tinland/a-bar/issues") {
+          if let url = URL(string: "https://github.com/SijanC147/a-bar/issues") {
             NSWorkspace.shared.open(url)
           }
         }
