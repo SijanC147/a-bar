@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+_No changes yet._
+
+## v1.7.2 - 2026-09-27
+
 - fix: the Time Machine icon in the settings sidebar is drawn at the same size as the other rows
 
 ## v1.7.1 - 2026-09-27
