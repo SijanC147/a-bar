@@ -324,6 +324,7 @@ struct WidgetSettings: Codable, Equatable {
   var mic: MicWidgetSettings = MicWidgetSettings()
   var keyboard: KeyboardWidgetSettings = KeyboardWidgetSettings()
   var timeMachine: TimeMachineWidgetSettings = TimeMachineWidgetSettings()
+  var solar: SolarWidgetSettings = SolarWidgetSettings()
   var github: GitHubWidgetSettings = GitHubWidgetSettings()
   var cpu: CPUWidgetSettings = CPUWidgetSettings()
   var memory: MemoryWidgetSettings = MemoryWidgetSettings()
@@ -460,6 +461,18 @@ struct TimeMachineWidgetSettings: Codable, Equatable {
   /// Backups move slowly, so this does not need to poll `tmutil` as often as the graphs.
   var refreshInterval: TimeInterval = 30
   var showIcon: Bool = true
+}
+
+struct SolarWidgetSettings: Codable, Equatable {
+  /// Events the bar can show. The widget shows the next one of these to happen.
+  var enabledEvents: [SolarEventKind] = [.goldenHour, .sunrise, .sunset, .civilTwilight]
+  var displayMode: SolarDisplayMode = .time
+  var showIcon: Bool = true
+
+  enum SolarDisplayMode: String, Codable, CaseIterable {
+    case time
+    case timeLeft
+  }
 }
 
 struct GitHubWidgetSettings: Codable, Equatable {

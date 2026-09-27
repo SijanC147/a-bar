@@ -22,6 +22,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
   case mic = "mic"
   case keyboard = "keyboard"
   case timeMachine = "time-machine"
+  case solar = "solar-times"
   case github = "github"
   case hackerNews = "hacker-news"
 
@@ -56,6 +57,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     case .mic: return "Microphone"
     case .keyboard: return "Keyboard"
     case .timeMachine: return "Time Machine"
+    case .solar: return "Solar Times"
     case .github: return "GitHub"
     case .hackerNews: return "Hacker News"
     case .cpu: return "CPU"
@@ -86,6 +88,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     case .mic: return "mic"
     case .keyboard: return "keyboard"
     case .timeMachine: return "TimeMachineIcon"
+    case .solar: return "SolarSunset"
     case .github: return "bell"    
     case .hackerNews: return "newspaper"
     case .cpu: return "cpu"
@@ -104,6 +107,7 @@ enum WidgetIdentifier: String, Codable, CaseIterable, Identifiable {
     switch self {
     case .gpu: return "GPUIcon"
     case .timeMachine: return "TimeMachineIcon"
+    case .solar: return "SolarSunset"
     default: return nil
     }
   }

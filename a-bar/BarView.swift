@@ -155,6 +155,8 @@ struct WidgetContainer: View {
         KeyboardWidget()
       case .timeMachine:
         TimeMachineWidget()
+      case .solar:
+        SolarWidget(position: position)
       case .github:
         GitHubWidget()
       case .hackerNews:

@@ -207,6 +207,10 @@
 		A1000259 /* TimeMachineStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000142 /* TimeMachineStatus.swift */; };
 		A1000143 /* TimeMachineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000143 /* TimeMachineWidget.swift */; };
 		A1000348 /* TimeMachineStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000348 /* TimeMachineStatusTests.swift */; };
+		A1000349 /* SolarTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000349 /* SolarTimes.swift */; };
+		A1000350 /* SolarTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000349 /* SolarTimes.swift */; };
+		A1000351 /* SolarTimesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000350 /* SolarTimesTests.swift */; };
+		A1000352 /* SolarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000351 /* SolarWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -364,6 +368,9 @@
 		B1000142 /* TimeMachineStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeMachineStatus.swift"; sourceTree = "<group>"; };
 		B1000143 /* TimeMachineWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMachineWidget.swift; sourceTree = "<group>"; };
 		B1000348 /* TimeMachineStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeMachineStatusTests.swift"; sourceTree = "<group>"; };
+		B1000349 /* SolarTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolarTimes.swift"; sourceTree = "<group>"; };
+		B1000350 /* SolarTimesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolarTimesTests.swift"; sourceTree = "<group>"; };
+		B1000351 /* SolarWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolarWidget.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -498,6 +505,7 @@
 				B1000046 /* MicWidget.swift */,
 				B1000047 /* KeyboardWidget.swift */,
 				B1000143 /* TimeMachineWidget.swift */,
+				B1000351 /* SolarWidget.swift */,
 				B1000048 /* GitHubWidget.swift */,
 				B1000049 /* BluetoothWidget.swift */,
 			);
@@ -595,6 +603,7 @@
 				B1000131 /* WindowFilter.swift */,
 				B1000141 /* StorageVolumeSelection.swift */,
 				B1000142 /* TimeMachineStatus.swift */,
+				B1000349 /* SolarTimes.swift */,
 				B1000132 /* LaunchAtLoginReconciler.swift */,
 				B1000133 /* BarWindowPlan.swift */,
 				B1000134 /* WindowManagerServices.swift */,
@@ -645,6 +654,7 @@
 				B1000321 /* SystemMetricsTests.swift */,
 				B1000347 /* StorageVolumeSelectionTests.swift */,
 				B1000348 /* TimeMachineStatusTests.swift */,
+				B1000350 /* SolarTimesTests.swift */,
 				B1000322 /* RateSamplerTests.swift */,
 				B1000323 /* BluetoothProfileParserTests.swift */,
 				B1000324 /* WifiScanTests.swift */,
@@ -906,6 +916,8 @@
 				A1000141 /* StorageVolumeSelection.swift in Sources */,
 				A1000142 /* TimeMachineStatus.swift in Sources */,
 				A1000143 /* TimeMachineWidget.swift in Sources */,
+				A1000349 /* SolarTimes.swift in Sources */,
+				A1000352 /* SolarWidget.swift in Sources */,
 				A1000132 /* LaunchAtLoginReconciler.swift in Sources */,
 				A1000133 /* BarWindowPlan.swift in Sources */,
 				A1000134 /* WindowManagerServices.swift in Sources */,
@@ -959,6 +971,8 @@
 				A1000347 /* StorageVolumeSelectionTests.swift in Sources */,
 				A1000259 /* TimeMachineStatus.swift in Sources */,
 				A1000348 /* TimeMachineStatusTests.swift in Sources */,
+				A1000350 /* SolarTimes.swift in Sources */,
+				A1000351 /* SolarTimesTests.swift in Sources */,
 				A1000322 /* RateSamplerTests.swift in Sources */,
 				A1000323 /* BluetoothProfileParserTests.swift in Sources */,
 				A1000324 /* WifiScanTests.swift in Sources */,
