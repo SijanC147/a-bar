@@ -918,6 +918,57 @@ struct TimeMachineSettingsView: View, ABarSettingsBindable {
   }
 }
 
+struct SolarSettingsView: View, ABarSettingsBindable {
+  @EnvironmentObject var settings: SettingsManager
+
+  private func eventBinding(_ kind: SolarEventKind) -> Binding<Bool> {
+    Binding(
+      get: { settings.draftSettings.widgets.solar.enabledEvents.contains(kind) },
+      set: { enabled in
+        var events = settings.draftSettings.widgets.solar.enabledEvents.filter { $0 != kind }
+        if enabled { events.append(kind) }
+        settings.draftSettings.widgets.solar.enabledEvents =
+          SolarEventKind.allCases.filter { events.contains($0) }
+      })
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("Solar Times").font(.headline)
+      Toggle("Show icon", isOn: binding(\.widgets.solar.showIcon))
+
+      Picker("Show", selection: binding(\.widgets.solar.displayMode)) {
+        Text("Time of event").tag(SolarWidgetSettings.SolarDisplayMode.time)
+        Text("Time left").tag(SolarWidgetSettings.SolarDisplayMode.timeLeft)
+      }
+      .pickerStyle(.segmented)
+      .frame(maxWidth: 260)
+
+      Text("Events").font(.subheadline).foregroundColor(.secondary)
+      ForEach(SolarEventKind.allCases) { kind in
+        Toggle(isOn: eventBinding(kind)) {
+          Label {
+            Text(kind.title)
+          } icon: {
+            Image(kind.iconAssetName)
+              .renderingMode(.template)
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .frame(width: 16, height: 16)
+              .foregroundColor(
+                kind.colorRole.color(in: ThemeManager.currentTheme(for: settings.draftSettings.theme)))
+          }
+        }
+      }
+
+      Text("The bar shows the next enabled event. Location comes from the Weather widget's custom location, or from your IP address when that is empty.")
+        .font(.caption)
+        .foregroundColor(.secondary)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+}
+
 struct CustomWidgetSettingsView: View {
   @EnvironmentObject var settings: SettingsManager
 

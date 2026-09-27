@@ -37,6 +37,12 @@ struct SettingsView: View {
             WidgetTypeIcon(identifier: .timeMachine, pointSize: 16)
           }
           .tag(SettingsTab.timeMachine)
+          Label {
+            Text("Solar Times")
+          } icon: {
+            WidgetTypeIcon(identifier: .solar, pointSize: 16)
+          }
+          .tag(SettingsTab.solar)
           Label("Custom", systemImage: "star").tag(SettingsTab.custom)
         }
         Section {
@@ -87,6 +93,8 @@ struct SettingsView: View {
               HackerNewsSettingsView()
             case .timeMachine:
               TimeMachineSettingsView()
+            case .solar:
+              SolarSettingsView()
             case .custom:
               CustomWidgetSettingsView()
             case .about:
@@ -140,6 +148,7 @@ enum SettingsTab: String, CaseIterable {
   case github
   case hackerNews
   case timeMachine
+  case solar
   case custom
   case about
 }
