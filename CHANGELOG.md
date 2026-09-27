@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+_No changes yet._
+
+## v1.7.4 - 2026-09-27
+
 - feat: Solar Times widget showing the next sunrise, sunset, solar noon, golden hour, blue hour or twilight, as a time or a countdown, with a popover listing the whole day. The events it shows are chosen in its settings, and it uses the Weather widget's location.
 
 ## v1.7.3 - 2026-09-27
