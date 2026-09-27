@@ -34,8 +34,7 @@ struct SettingsView: View {
           Label {
             Text("Time Machine")
           } icon: {
-            Image("TimeMachineIcon")
-              .renderingMode(.template)
+            WidgetTypeIcon(identifier: .timeMachine, pointSize: 16)
           }
           .tag(SettingsTab.timeMachine)
           Label("Custom", systemImage: "star").tag(SettingsTab.custom)
