@@ -47,16 +47,17 @@ gitignored. The script does nothing when `CI` or `GITHUB_ACTIONS` is set.
   a whitelist of production sources, so a test compiling does not prove the file is a member:
   run `./scripts/check-test-membership.sh`.
 - `.github/workflows/tests.yml` runs on `macos-15`. Its jobs are `Unit tests` and, on push only,
-  `Publish badges`. As of 2026-09-27 **the fork has never run an Actions workflow**
-  (`gh api repos/SijanC147/a-bar/actions/runs` reports 0), so no check context has been observed
-  yet.
+  `Publish badges`. The required check context is `Unit tests` (first fork run 2026-09-27, after
+  enabling workflows on the fork's Actions tab; GitHub disables inherited workflows on a fork).
 
 ## Versioning
 
-Three version sources disagree today. `MARKETING_VERSION = 1.6.0` is in the app target,
-`CHANGELOG.md` has `v1.6.0`, and `a-bar/Info.plist` hardcodes `CFBundleShortVersionString`
-`1.0.0` and `CFBundleVersion` `1`. Sparkle was removed upstream and stays removed. The app is
-not notarized and is ad-hoc signed.
+`MARKETING_VERSION` (app target, 1.7.0 since the first fork release) is the one version source.
+`a-bar/Info.plist` reads `$(MARKETING_VERSION)` and `$(CURRENT_PROJECT_VERSION)`. With
+`GENERATE_INFOPLIST_FILE = YES` the build settings won even over the old literal `1.0.0`
+(measured on the mini, SB23-3098), so a Hextap release tag becomes the app version. Keep
+`CHANGELOG.md` in step. Sparkle was removed upstream and stays removed. The app is not
+notarized and is ad-hoc signed.
 
 ## Distribution (Hextap)
 
