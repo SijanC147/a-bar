@@ -6,7 +6,7 @@
 [![Logic coverage](https://raw.githubusercontent.com/SijanC147/a-bar/badges/logic.svg?v=1)](https://github.com/SijanC147/a-bar/actions/workflows/tests.yml)
 
 > [!IMPORTANT]
-> **This is a fork.** [SijanC147/a-bar](https://github.com/SijanC147/a-bar) is Sean Bugeja's fork of [Jean-Tinland/a-bar](https://github.com/Jean-Tinland/a-bar), by Jean Tinland. It adds a storage widget with disk and value choices, a Time Machine widget, a combined CPU & GPU graph, and level bars for sound and microphone, starting at v1.7.0. Releases on this page are built from the fork. For upstream builds, issues and support, use the upstream repository.
+> **This is a fork.** [SijanC147/a-bar](https://github.com/SijanC147/a-bar) is Sean Bugeja's fork of [Jean-Tinland/a-bar](https://github.com/Jean-Tinland/a-bar), by Jean Tinland. It adds a storage widget with disk and value choices, a Time Machine widget, a combined CPU & GPU graph, and level bars for sound and microphone, starting at v1.7.1. Releases on this page are built from the fork. For upstream builds, issues and support, use the upstream repository.
 
 Yet **a(nother) bar** :)
 
