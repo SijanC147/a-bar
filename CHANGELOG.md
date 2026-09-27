@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 
 _No changes yet._
 
+## v1.7.1 - 2026-09-27
+
+- ci: pin the Hextap release caller to hextap-toolkit v0.8.1. Toolkit v0.8.0 ran a Bun check before an Xcode project's quality commands, so the v1.7.0 release never built. v1.7.1 ships the v1.7.0 changes below.
+
+## v1.7.0 - 2026-09-27 (tagged, not published)
+
+First release of the SijanC147 fork, published as a Homebrew Cask through Hextap.
+
+- feat: storage widget picks which disks to show (every disk, or a selection matched by volume UUID) and what to show (percentage used, percentage remaining, or space remaining)
+- feat: Time Machine widget, reading `tmutil status` and `tmutil currentphase`
+- feat: CPU & GPU widget drawing both on one graph
+- feat: sound and microphone widgets can show a level bar behind the icon
+- feat: GPU widget has its own icon
+- fix: saving settings follows a symlinked `~/.a-barrc` and replaces the target atomically
+- chore: the bundle version comes from `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
+
 ## v1.6.0 - 2026-09-21
 
 - chore: deadcode removal
