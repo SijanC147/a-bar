@@ -34,7 +34,17 @@ struct SolarWidget: View {
         }
       )
     )
-    .onAppear { if coordinate == nil { resolveLocation() } }
+    .task {
+      // Keep trying until a location resolves: the first attempt can run before the network
+      // is up, and nothing else would retry it.
+      while coordinate == nil, !Task.isCancelled {
+        if let found = await SolarCoordinate.resolve(query: locationQuery) {
+          coordinate = found
+        } else {
+          try? await Task.sleep(nanoseconds: 60 * 1_000_000_000)
+        }
+      }
+    }
     .onChange(of: locationQuery) { _ in resolveLocation() }
     .onChange(of: coordinate) { newValue in
       popoverManager.setContent {
@@ -68,9 +78,9 @@ struct SolarWidget: View {
       HStack(spacing: 4) {
         if solarSettings.showIcon {
           SolarEventIcon(kind: .sunrise, size: iconSize)
-            .foregroundColor(theme.minor)
+            .foregroundColor(theme.foreground.opacity(0.5))
         }
-        Text("--:--").foregroundColor(theme.minor)
+        Text("--:--").foregroundColor(theme.foreground.opacity(0.5))
       }
     }
   }
@@ -164,10 +174,14 @@ struct SolarCoordinate: Equatable {
     return await geocode(trimmed)
   }
 
+  /// ip-api's free tier is HTTP only, which App Transport Security blocks for URLSession, so
+  /// this goes through curl the way the Weather widget does.
   private static func fromIPAddress() async -> SolarCoordinate? {
-    guard let url = URL(string: "http://ip-api.com/json/?fields=lat,lon"),
-      let response = try? await URLSession.shared.data(from: url),
-      let json = try? JSONSerialization.jsonObject(with: response.0) as? [String: Any],
+    guard
+      let output = try? await ShellExecutor.run(
+        "curl -s 'http://ip-api.com/json/?fields=lat,lon' 2>/dev/null"),
+      let data = output.data(using: .utf8),
+      let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
       let lat = json["lat"] as? Double, let lon = json["lon"] as? Double
     else { return nil }
     return SolarCoordinate(latitude: lat, longitude: lon)
