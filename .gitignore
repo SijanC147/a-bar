@@ -45,3 +45,8 @@ AppIcon.appiconset/Contents.json
 
 # User-specific files
 *.xcuserstate
+
+# Local agent files. CLAUDE.local.md holds private tracker mapping.
+/CLAUDE.local.md
+/KICKOFF.md
+/.omc/
