@@ -1345,6 +1345,11 @@ struct CustomWidgetEditorView: View {
 }
 
 struct AboutView: View {
+  /// The release version, which the build sets from MARKETING_VERSION.
+  private var appVersion: String {
+    Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+  }
+
   var body: some View {
     VStack(spacing: 10) {
       Image("AppLogo")
@@ -1360,7 +1365,7 @@ struct AboutView: View {
         .font(.headline)
         .foregroundColor(.secondary)
 
-      Text("Version 1.6.0")
+      Text("Version \(appVersion)")
         .font(.caption)
 
       Divider()
@@ -1373,13 +1378,13 @@ struct AboutView: View {
 
       HStack {
         Button("GitHub") {
-          if let url = URL(string: "https://github.com/Jean-Tinland/a-bar") {
+          if let url = URL(string: "https://github.com/SijanC147/a-bar") {
             NSWorkspace.shared.open(url)
           }
         }
 
         Button("Report Issue") {
-          if let url = URL(string: "https://github.com/Jean-Tinland/a-bar/issues") {
+          if let url = URL(string: "https://github.com/SijanC147/a-bar/issues") {
             NSWorkspace.shared.open(url)
           }
         }

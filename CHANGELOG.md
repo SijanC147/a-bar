@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-_No changes yet._
+- fix: Settings › About shows the installed version instead of a fixed "1.6.0", and its GitHub and Report Issue buttons open this fork
 
 ## v1.7.2 - 2026-09-27
 
