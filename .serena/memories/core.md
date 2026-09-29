@@ -23,4 +23,6 @@ Fork `SijanC147/a-bar` of `Jean-Tinland/a-bar`, GPL-3.0, public repo. Push only 
 
 ## More
 - Stack, versions, signing, distribution: `mem:tech_stack`.
+- Cutting a release, the OP token, and brew upgrade on this Mac: `mem:release_process`.
+- Editing Sean's installed config and checking the running bar by screenshot: `mem:live_config`.
 - Commands: `mem:suggested_commands`. Done criteria: `mem:task_completion`.

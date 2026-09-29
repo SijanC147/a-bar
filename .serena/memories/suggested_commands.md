@@ -8,6 +8,7 @@ ssh mac-mini 'cd ~/Code/a-bar && git fetch -q origin && git switch -q --detach <
   xcodebuild test -project a-bar.xcodeproj -scheme a-bar -destination "platform=macOS"'
 ```
 Afterwards leave the mini clean and back on `main` (`git switch -q main`). The mini's origin URL uses lowercase `sijanc147`; same repo.
+Don't pass `-quiet` when you need the numbers: it suppresses the `Executed N tests, with 0 failures` lines. Redirect to a log and grep `Test Suite 'All tests'` with `-A1`, plus `TEST (SUCCEEDED|FAILED)`. Suite size is 810 tests as of v1.7.5.
 A green build ends `** TEST SUCCEEDED **` / `BUILD SUCCEEDED` (~24 s build). Pipe through nothing when reading the exit status.
 
 ## Local (Mac Studio, no Xcode)
